@@ -25,7 +25,7 @@ public class CartSessionControler {
 
     @GetMapping("/item/{id}")
     public ResponseEntity<String> addToCart (@PathVariable long id){
-        List<Long> itemId = (List<Long>) session.getAttribute("add");
+        List<Long> itemId = (List<Long>) session.getAttribute("item");
 
         if(itemId == null){
             itemId = new ArrayList<>();
@@ -33,13 +33,13 @@ public class CartSessionControler {
 
         itemId.add(productService.getProductById(id).getId());
 
-        session.setAttribute("add",itemId);
+        session.setAttribute("item",itemId);
         return ResponseEntity.ok("item added to cart");
     }
 
     @GetMapping("/getitem")
     public ResponseEntity<List<ProductResponseDTO>> getItem (){
-        List<Long> itemId = (List<Long>) session.getAttribute("add");
+        List<Long> itemId = (List<Long>) session.getAttribute("item");
         List<ProductResponseDTO> productResponseDTOs = new ArrayList<>();
 
         if(itemId != null){
@@ -52,9 +52,9 @@ public class CartSessionControler {
         return ResponseEntity.ok(productResponseDTOs);
     }
 
-    @GetMapping("/removefromcart/{id}")
+    @DeleteMapping("/removefromcart/{id}")
     public ResponseEntity<String> removeFromCart (@PathVariable long id){
-        List<Long> itemId = (List<Long>) session.getAttribute("remove");
+        List<Long> itemId = (List<Long>) session.getAttribute("item");
 
         if(itemId == null){
             itemId = new ArrayList<>();
@@ -62,7 +62,7 @@ public class CartSessionControler {
 
         itemId.remove(productService.getProductById(id).getId());
 
-        session.setAttribute("remove",itemId);
+        session.setAttribute("item",itemId);
         return ResponseEntity.ok("item removed from cart");
     }
 
