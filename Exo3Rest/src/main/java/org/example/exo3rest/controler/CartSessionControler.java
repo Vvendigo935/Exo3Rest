@@ -6,10 +6,7 @@ import org.example.exo3rest.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +33,7 @@ public class CartSessionControler {
 
         itemId.add(productService.getProductById(id).getId());
 
-        session.setAttribute("item",itemId);
+        session.setAttribute("add",itemId);
         return ResponseEntity.ok("item added to cart");
     }
 
@@ -54,4 +51,21 @@ public class CartSessionControler {
         }
         return ResponseEntity.ok(productResponseDTOs);
     }
+
+    @GetMapping("/removefromcart/{id}")
+    public ResponseEntity<String> removeFromCart (@PathVariable long id){
+        List<Long> itemId = (List<Long>) session.getAttribute("remove");
+
+        if(itemId == null){
+            itemId = new ArrayList<>();
+        }
+
+        itemId.remove(productService.getProductById(id).getId());
+
+        session.setAttribute("remove",itemId);
+        return ResponseEntity.ok("item removed from cart");
+    }
+
+
+
 }
